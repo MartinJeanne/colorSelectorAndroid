@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:width="40dp"
+        android:height="40dp"
+        android:id="@+id/tvCouleur"
+        android:layout_margin="20dp"
+        android:layout_marginRight="30dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNomCouleur"
+        android:text="default_text"
+        android:layout_margin="20dp"
+        android:layout_marginRight="10dp"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:gravity="center|right"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_modif"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="#1FA6C8"
+                android:text="modifier" />
+
+            <Button
+                android:id="@+id/btn_suppr"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="#FF0707"
+                android:text="Supprimer" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
