@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class Couleur implements Parcelable {
-
     int a;
     int r;
     int v;
@@ -58,9 +57,7 @@ public class Couleur implements Parcelable {
         parcel.writeString(nom);
     }
 
-    public int getA() {
-        return a;
-    }
+    public int getA() { return a; }
 
     public void setA(int a) {
         this.a = a;

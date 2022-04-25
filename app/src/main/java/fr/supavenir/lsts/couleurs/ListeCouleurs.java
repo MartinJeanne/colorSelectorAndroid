@@ -45,15 +45,19 @@ public class ListeCouleurs extends AppCompatActivity {
                         int b = result.getData().getIntExtra("b", 255);
                         String nomCouleur = result.getData().getStringExtra("nom");
                         if (TextUtils.isEmpty(nomCouleur)) nomCouleur = "Couleur";
-                        Log.i("--COULEUR","couleur " + a + ", " + r + ", " + v +", " + b + " " + nomCouleur);
+                        Log.i("--COULEUR",a + ", " + r + ", " + v +", " + b + " " + nomCouleur);
                         String requete = result.getData().getStringExtra("requete");
-                        if(requete.equals("AJOUTER")) adaptateur.ajouterCouleur(new Couleur(a, r, v, b, nomCouleur));
-                        else adaptateur.changerCouleur(adaptateur.getPositionEnCours(), new Couleur(a, r, v, b, nomCouleur));
+                        Couleur couleur = new Couleur(a, r, v, b, nomCouleur);
+
+                        if(requete.equals("AJOUTER")) adaptateur.ajouterCouleur(couleur);
+                        else if (requete.equals("MODIFIER")) adaptateur.changerCouleur(couleur);
+                        else if (requete.equals("SUPPRIMER")) adaptateur.supprimerCouleur(couleur);
+
                     } else if( result.getResultCode() == RESULT_CANCELED) {
                         Toast.makeText(ListeCouleurs.this, "Opération annulée", Toast.LENGTH_SHORT).show();
                     }
+                    getCouleursFromDB();
                 }
-
             });
 
 
@@ -62,16 +66,14 @@ public class ListeCouleurs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activite_liste_couleurs );
 
-        adaptateur = new AdaptateurCouleur(this , getCouleursFormDB());
-
         boolean dbUpToDate = checkDbState();
         if(!dbUpToDate) {
             //createAndPopulateDb();
             writeDbState();
         }
 
-        lvListeCouleurs = findViewById(R.id.lvCouleurs);
-        lvListeCouleurs.setAdapter(adaptateur);
+        getCouleursFromDB();
+
         btnAjouterCouleur = findViewById(R.id.btnAjouterCouleur);
         btnAjouterCouleur.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -82,13 +84,6 @@ public class ListeCouleurs extends AppCompatActivity {
             }
         });
         //deleteInDb();
-    }
-
-    public ArrayList<Couleur> generationListeCouleurs() {
-        ArrayList<Couleur> listeCouleursInitiale = new ArrayList<>();
-        listeCouleursInitiale.add(new Couleur( 255, 0 , 0, 0 , "Noir absolu"));
-        listeCouleursInitiale.add(new Couleur( 255, 255 , 255, 255 , "Blanc absolu"));
-        return listeCouleursInitiale;
     }
 
     public void getLanceurActiviteChoixCouleur(Intent intent) { lanceurActiviteChoixCouleur.launch(intent); }
@@ -134,11 +129,11 @@ public class ListeCouleurs extends AppCompatActivity {
     }
 
     @SuppressLint("Range")
-    private ArrayList<Couleur> getCouleursFormDB() {
-        String sqlQuery = "Select * from CouleurARGB order by nom";
+    public void getCouleursFromDB() {
+        String sqlQuery = "Select * from CouleurARGB";
         DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(sqlQuery, null);
-        ArrayList<Couleur> arrayList = new ArrayList<>(cursor.getCount());
+        ArrayList<Couleur> listCouleur = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
             String nom = cursor.getString(cursor.getColumnIndex("nom"));
             int a = cursor.getInt(cursor.getColumnIndex("a"));
@@ -146,13 +141,19 @@ public class ListeCouleurs extends AppCompatActivity {
             int g = cursor.getInt(cursor.getColumnIndex("g"));
             int b = cursor.getInt(cursor.getColumnIndex("b"));
 
-            Couleur couleur = new Couleur(a,r,g,b,nom);
-            arrayList.add(couleur);
+            Couleur couleur = new Couleur(a, r, g, b, nom);
+            listCouleur.add(couleur);
         }
         cursor.close();
-        return arrayList;
-    }
 
+        adaptateur = new AdaptateurCouleur(this, listCouleur);
+        if(listCouleur.isEmpty()) {
+            //Toast.makeText(this,"La liste de couleur est vide",Toast.LENGTH_LONG).show();
+        } else {
+            lvListeCouleurs = findViewById(R.id.lvCouleurs);
+            lvListeCouleurs.setAdapter(adaptateur);
+        }
+    }
 
     private boolean checkDbState() {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);

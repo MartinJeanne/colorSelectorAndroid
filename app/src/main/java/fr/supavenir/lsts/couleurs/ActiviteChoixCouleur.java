@@ -33,7 +33,7 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
     private int v = 0;
     private int b = 0;
     private int resultat = RESULT_OK;
-    private boolean toEdit = false;
+    private String actionToperform = "AJOUTER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +61,17 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         Intent intent = getIntent();
         Log.i("--COULEUR", intent.getStringExtra("requete"));
         if(intent.getStringExtra("requete").equals("MODIFIER")) {
-            toEdit = true;
-            Log.i("intent",intent.getParcelableExtra("couleur").toString());
+            actionToperform = "MODIFIER";
             Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
-            Log.i("info_Couleur","couleur : "+couleur.toString());
-            if(couleur!=null) {
+            Log.i("--After Intent","couleur : " + couleur.toString());
+            if(couleur != null) {
                 putInitialValue(couleur);
             }
+        }
+        else if (intent.getStringExtra("requete").equals("SUPPRIMER")) {
+            actionToperform = "SUPPRIMER";
+            Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
+            finish();
         }
 
         Button btnOk = findViewById( R.id.btnOk );
@@ -128,10 +132,9 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         resultIntent.putExtra("v" , v);
         resultIntent.putExtra("b" , b);
         resultIntent.putExtra( "nom" , etNomCouleur.getText().toString());
-        if(toEdit) resultIntent.putExtra("requete","MODIFIER");
-        else resultIntent.putExtra("requete","AJOUTER");
+        resultIntent.putExtra("requete", actionToperform);
 
-        setResult( resultat , resultIntent );
+        setResult(resultat , resultIntent);
         super.finish();
     }
 

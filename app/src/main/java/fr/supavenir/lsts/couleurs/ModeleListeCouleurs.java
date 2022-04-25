@@ -1,5 +1,7 @@
 package fr.supavenir.lsts.couleurs;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class ModeleListeCouleurs {
@@ -18,7 +20,11 @@ public class ModeleListeCouleurs {
 
     public void ajouterCouleur(Couleur couleur) { lesCouleurs.add(couleur); }
 
-    public void retirerCouleurEnPosition(int position) { lesCouleurs.remove(position); }
+    public void retirerCouleurEnPosition(Couleur couleur) {
+        int index = lesCouleurs.indexOf(couleur);
+        Log.i("--INDEX", "" + index);
+        lesCouleurs.remove(index);
+    }
 
-    public void modifierCouleur(int position , Couleur couleur) { lesCouleurs.set(position , couleur); }
+    public void modifierCouleur(Couleur couleur) { lesCouleurs.set(lesCouleurs.indexOf(couleur), couleur); }
 }

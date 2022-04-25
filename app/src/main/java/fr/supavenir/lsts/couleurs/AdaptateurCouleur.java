@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import fr.supavenir.lsts.couleurs.db.DbHelper;
@@ -30,7 +32,7 @@ public class AdaptateurCouleur extends BaseAdapter {
     private ModeleListeCouleurs modele = new ModeleListeCouleurs();
     private int positionEnCours = 0;
 
-    public AdaptateurCouleur( Context context , ArrayList<Couleur> couleurs ) {
+    public AdaptateurCouleur(Context context , ArrayList<Couleur> couleurs) {
         this.context = context;
         modele.setLesCouleurs(couleurs);
     }
@@ -39,45 +41,41 @@ public class AdaptateurCouleur extends BaseAdapter {
         DbHelper dbHelper = new DbHelper(this.context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
-        String[] projection = new String[]{"id"};
-        Cursor cursor = db.query("CouleurARGB", projection, null, null, null, null, null, null);
-        int id = cursor.getCount() + 1;
-        Log.i("--COULEUR","id : " + id);
-        db.execSQL("INSERT INTO CouleurARGB (id, nom, a, r ,g ,b) VALUES (" + id + ",'" + couleur.nom + "'," + couleur.a + "," + couleur.r + "," + couleur.v + "," + couleur.b + ");");
+        String[] columnNames = new String[]{"nom"};
+        Cursor cursor = db.query("CouleurARGB", columnNames, "nom = '" + couleur.nom + "'", null, null, null, null, null);
+        if (cursor.getCount() > 0) {
+            Toast.makeText(context, "Nom déjà utilisé", Toast.LENGTH_LONG).show();
+        }
+        else db.execSQL("INSERT INTO CouleurARGB (nom, a, r ,g ,b) VALUES ('" + couleur.nom + "'," + couleur.a + "," + couleur.r + "," + couleur.v + "," + couleur.b + ");");
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
-        modele.ajouterCouleur(couleur);
         this.notifyDataSetChanged();
     }
 
-    public void supprimerCouleur(int position) {
+    public void changerCouleur(Couleur  couleur) {
         DbHelper dbHelper = new DbHelper(this.context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
-        int id = position + 1;
-        db.execSQL("DELETE FROM CouleurARGB WHERE id = " + id);
+        db.execSQL("UPDATE CouleurARGB SET nom = '"+ couleur.nom +"', a = " + couleur.a + ", r = " + couleur.r + ", g = " + couleur.v + ", b = " + couleur.b +
+                " WHERE nom = '" + couleur.nom + "'");
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
-        Couleur c = modele.getLesCouleurs().get(position);
-        modele.retirerCouleurEnPosition(position);
         this.notifyDataSetChanged();
     }
 
-    public void changerCouleur(int position, Couleur  couleur) {
+    public void supprimerCouleur(Couleur couleur) {
         DbHelper dbHelper = new DbHelper(this.context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
-        int id = position + 1;
-        Log.i("--COULEUR","id " + id);
-        db.execSQL("UPDATE CouleurARGB SET nom = '"+ couleur.nom +"', a = " + couleur.a + ", r = " + couleur.r + ", g = " + couleur.v + ", b = " + couleur.b + " WHERE id = " + id);
+        db.execSQL("DELETE FROM CouleurARGB WHERE nom = '" + couleur.nom +"'");
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
-        modele.modifierCouleur(position, couleur);
         this.notifyDataSetChanged();
     }
+
 
     /** On adapte les methodes pour visualiser le modèle en mémoire. */
     @Override
@@ -99,8 +97,7 @@ public class AdaptateurCouleur extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Important : le code pour recuperer la vue de l'item par son layout
-        View itemView = LayoutInflater.from( context ).inflate(R.layout.liste_couleur_item,
-                parent , false );
+        View itemView = LayoutInflater.from(context).inflate(R.layout.liste_couleur_item, parent , false );
 
         TextView tvCouleur = itemView.findViewById( R.id.tvCouleur);
         TextView tvNomCouleur = itemView.findViewById( R.id.tvNomCouleur );
@@ -112,22 +109,29 @@ public class AdaptateurCouleur extends BaseAdapter {
         int r = modele.getLesCouleurs().get(position).getR();
         int v = modele.getLesCouleurs().get(position).getV();
         int b = modele.getLesCouleurs().get(position).getB();
-        String nom = modele.getLesCouleurs().get( position ).getNom();
-        Couleur couleur = new Couleur(a,r,v,b);
-        couleur.setNom(nom);
+        String nom = modele.getLesCouleurs().get(position).getNom();
+        Couleur couleur = new Couleur(a, r, v, b, nom);
 
-        btnSuppr.setOnClickListener(view -> supprimerCouleur(position));
 
         btnModif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ActiviteChoixCouleur.class);
-                Log.i("couleurBeforeIntent",couleur.toString());
-                intent.putExtra("couleur",couleur);
+                Log.i("--couleurBeforeIntent", couleur.toString());
+                intent.putExtra("couleur", couleur);
                 intent.putExtra("requete", "MODIFIER");
-                setPositionEnCours(position);
                 ((ListeCouleurs)context).getLanceurActiviteChoixCouleur(intent);
+            }
+        });
 
+        btnSuppr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActiviteChoixCouleur.class);
+                Log.i("--couleurBeforeIntent", couleur.toString());
+                intent.putExtra("couleur", couleur);
+                intent.putExtra("requete", "SUPPRIMER");
+                ((ListeCouleurs)context).getLanceurActiviteChoixCouleur(intent);
             }
         });
 
