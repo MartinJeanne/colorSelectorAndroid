@@ -66,7 +66,7 @@ public class ListeCouleurs extends AppCompatActivity {
 
         boolean dbUpToDate = checkDbState();
         if(!dbUpToDate) {
-            createAndPopulateDb();
+            //createAndPopulateDb();
             writeDbState();
         }
 
