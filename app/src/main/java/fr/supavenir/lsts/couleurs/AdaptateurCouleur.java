@@ -29,7 +29,7 @@ public class AdaptateurCouleur extends BaseAdapter {
     private Context context;
     private ArrayList<Couleur> couleurs;
 
-    public AdaptateurCouleur(Context context , ArrayList<Couleur> couleurs) {
+    public AdaptateurCouleur(Context context, ArrayList<Couleur> couleurs) {
         this.context = context;
         this.couleurs = couleurs;
     }
@@ -78,9 +78,7 @@ public class AdaptateurCouleur extends BaseAdapter {
 
     /** On adapte les methodes pour visualiser le modèle en mémoire. */
     @Override
-    public int getCount() {
-        return couleurs.size();
-    }
+    public int getCount() { return couleurs.size(); }
 
     @Override
     public Object getItem(int position) {
@@ -95,11 +93,11 @@ public class AdaptateurCouleur extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        // Important : le code pour recuperer la vue de l'item par son layout
+        // Important : le code pour recupérer la vue de l'item par son layout
         View itemView = LayoutInflater.from(context).inflate(R.layout.liste_couleur_item, parent , false );
 
-        TextView tvCouleur = itemView.findViewById( R.id.tvCouleur);
-        TextView tvNomCouleur = itemView.findViewById( R.id.tvNomCouleur );
+        TextView tvCouleur = itemView.findViewById(R.id.tvCouleur);
+        TextView tvNomCouleur = itemView.findViewById( R.id.tvNomCouleur);
 
         Button btnSuppr = itemView.findViewById(R.id.btn_suppr);
         Button btnModif = itemView.findViewById(R.id.btn_modif);
@@ -133,8 +131,9 @@ public class AdaptateurCouleur extends BaseAdapter {
             }
         });
 
-        tvCouleur.setBackgroundColor(Color.argb( a , r, v ,b ));
+        tvCouleur.setBackgroundColor(Color.argb(a, r, v, b));
         tvNomCouleur.setText(((Couleur)getItem(position)).getNom());
+
         return itemView;
     }
 }
