@@ -97,7 +97,7 @@ public class AdaptateurCouleur extends BaseAdapter {
         View itemView = LayoutInflater.from(context).inflate(R.layout.liste_couleur_item, parent , false );
 
         TextView tvCouleur = itemView.findViewById(R.id.tvCouleur);
-        TextView tvNomCouleur = itemView.findViewById( R.id.tvNomCouleur);
+        TextView tvNomCouleur = itemView.findViewById(R.id.tvNomCouleur);
 
         Button btnSuppr = itemView.findViewById(R.id.btn_suppr);
         Button btnModif = itemView.findViewById(R.id.btn_modif);
