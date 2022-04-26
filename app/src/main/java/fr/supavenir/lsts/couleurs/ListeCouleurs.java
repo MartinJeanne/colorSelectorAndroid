@@ -45,7 +45,7 @@ public class ListeCouleurs extends AppCompatActivity {
                         int b = result.getData().getIntExtra("b", 255);
                         String nomCouleur = result.getData().getStringExtra("nom");
                         if (TextUtils.isEmpty(nomCouleur)) nomCouleur = "Couleur";
-                        Log.i("--COULEUR",a + ", " + r + ", " + v +", " + b + " " + nomCouleur);
+                        Log.i("--ListeCouleur",a + ", " + r + ", " + v +", " + b + ", " + nomCouleur);
                         String requete = result.getData().getStringExtra("requete");
                         Couleur couleur = new Couleur(a, r, v, b, nomCouleur);
 
@@ -147,12 +147,8 @@ public class ListeCouleurs extends AppCompatActivity {
         cursor.close();
 
         adaptateur = new AdaptateurCouleur(this, listCouleur);
-        if(listCouleur.isEmpty()) {
-            //Toast.makeText(this,"La liste de couleur est vide",Toast.LENGTH_LONG).show();
-        } else {
-            lvListeCouleurs = findViewById(R.id.lvCouleurs);
-            lvListeCouleurs.setAdapter(adaptateur);
-        }
+        lvListeCouleurs = findViewById(R.id.lvCouleurs);
+        lvListeCouleurs.setAdapter(adaptateur);
     }
 
     private boolean checkDbState() {

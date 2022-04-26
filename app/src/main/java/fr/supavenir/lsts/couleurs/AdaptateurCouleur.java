@@ -44,9 +44,11 @@ public class AdaptateurCouleur extends BaseAdapter {
         String[] columnNames = new String[]{"nom"};
         Cursor cursor = db.query("CouleurARGB", columnNames, "nom = '" + couleur.nom + "'", null, null, null, null, null);
         if (cursor.getCount() > 0) {
-            Toast.makeText(context, "Nom déjà utilisé", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Nom déjà utilisé", Toast.LENGTH_LONG).show();
+            cursor = db.query("CouleurARGB", columnNames, null, null, null, null, null, null);
+            couleur.nom += " " + cursor.getCount();
         }
-        else db.execSQL("INSERT INTO CouleurARGB (nom, a, r ,g ,b) VALUES ('" + couleur.nom + "'," + couleur.a + "," + couleur.r + "," + couleur.v + "," + couleur.b + ");");
+        db.execSQL("INSERT INTO CouleurARGB (nom, a, r ,g ,b) VALUES ('" + couleur.nom + "'," + couleur.a + "," + couleur.r + "," + couleur.v + "," + couleur.b + ");");
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();

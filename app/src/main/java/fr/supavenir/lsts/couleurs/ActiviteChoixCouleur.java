@@ -71,6 +71,10 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         else if (intent.getStringExtra("requete").equals("SUPPRIMER")) {
             actionToperform = "SUPPRIMER";
             Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
+            Log.i("--After Intent","couleur : " + couleur.toString());
+            if(couleur != null) {
+                putInitialValue(couleur);
+            }
             finish();
         }
 
