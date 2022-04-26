@@ -12,11 +12,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-
-//TODO  Empêcher la validation par OK tant que le champ nom de la couleur est vide ou ne
-//TODO  contient que des blancs
-//TODO  Passer directement un objet Couleur dans l'intent de retour de resultat
-
+//TODO  Empêcher la validation par OK tant que le champ nom de la couleur ou ne contient que des blancs
 
 public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
 
@@ -34,6 +30,7 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
     private int b = 0;
     private int resultat = RESULT_OK;
     private String actionToperform = "AJOUTER";
+    private String ancienNom = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +59,10 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         if(intent.getStringExtra("requete").equals("MODIFIER")) {
             actionToperform = "MODIFIER";
             Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
-            if(couleur != null) putInitialValue(couleur);
+            if(couleur != null) {
+                this.ancienNom = couleur.getNom();
+                putInitialValue(couleur);
+            }
         }
         else if (intent.getStringExtra("requete").equals("SUPPRIMER")) {
             actionToperform = "SUPPRIMER";
@@ -110,9 +110,7 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        miseAjour();
-    }
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) { miseAjour(); }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) { }
@@ -124,15 +122,16 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
     @Override
     public void finish() {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("a" , a);
-        resultIntent.putExtra("r" , r);
-        resultIntent.putExtra("v" , v);
-        resultIntent.putExtra("b" , b);
+        resultIntent.putExtra("a", a);
+        resultIntent.putExtra("r", r);
+        resultIntent.putExtra("v", v);
+        resultIntent.putExtra("b", b);
         resultIntent.putExtra( "nom" , etNomCouleur.getText().toString());
+
+        if (!this.ancienNom.isEmpty()) resultIntent.putExtra("ancienNom", this.ancienNom);
         resultIntent.putExtra("requete", actionToperform);
 
         setResult(resultat , resultIntent);
         super.finish();
     }
-
 }

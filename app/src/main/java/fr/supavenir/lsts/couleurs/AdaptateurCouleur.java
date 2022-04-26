@@ -24,8 +24,6 @@ import fr.supavenir.lsts.couleurs.db.DbHelper;
  *  L'adaptateur pour visualiser le modèle : une liste d'objets Couleur
  */
 
-// TODO : Mettre en place un cache dans la methode getView()
-
 public class AdaptateurCouleur extends BaseAdapter {
 
     private Context context;
@@ -54,12 +52,12 @@ public class AdaptateurCouleur extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void changerCouleur(Couleur  couleur) {
+    public void changerCouleur(Couleur  couleur, String ancienNom) {
         DbHelper dbHelper = new DbHelper(this.context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         db.execSQL("UPDATE CouleurARGB SET nom = '"+ couleur.nom +"', a = " + couleur.a + ", r = " + couleur.r + ", g = " + couleur.v + ", b = " + couleur.b +
-                " WHERE nom = '" + couleur.nom + "'");
+                " WHERE nom = '" + ancienNom+ "'");
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
@@ -137,7 +135,6 @@ public class AdaptateurCouleur extends BaseAdapter {
 
         tvCouleur.setBackgroundColor(Color.argb( a , r, v ,b ));
         tvNomCouleur.setText(((Couleur)getItem(position)).getNom());
-        //itemView.setBackgroundColor(Color.argb(255, 200,200,200));
         return itemView;
     }
 }

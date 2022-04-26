@@ -11,21 +11,12 @@ public class Couleur implements Parcelable {
     int b;
     String nom;
 
-    public Couleur() { }
-
     public Couleur(int a, int r, int v, int b, String nom) {
         this.a = a;
         this.r = r;
         this.v = v;
         this.b = b;
         this.nom = nom;
-    }
-
-    public Couleur(int a, int r, int v, int b) {
-        this.a = a;
-        this.r = r;
-        this.v = v;
-        this.b = b;
     }
 
     public Couleur(Parcel parcel) {
@@ -59,9 +50,7 @@ public class Couleur implements Parcelable {
 
     public int getA() { return a; }
 
-    public void setA(int a) {
-        this.a = a;
-    }
+    public void setA(int a) { this.a = a; }
 
     public int getR() {
         return r;

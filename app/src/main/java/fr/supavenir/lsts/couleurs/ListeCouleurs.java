@@ -23,11 +23,6 @@ import java.util.ArrayList;
 
 import fr.supavenir.lsts.couleurs.db.DbHelper;
 
-
-// TODO pouvoir modifier et supprimer la couleur sélectionnée dans la liste
-// TODO en ajoutant deux éléments visibles comportant des îcones de type delete et edit
-
-
 public class ListeCouleurs extends AppCompatActivity {
 
     private ListView lvListeCouleurs;
@@ -50,7 +45,12 @@ public class ListeCouleurs extends AppCompatActivity {
                         Couleur couleur = new Couleur(a, r, v, b, nomCouleur);
 
                         if(requete.equals("AJOUTER")) adaptateur.ajouterCouleur(couleur);
-                        else if (requete.equals("MODIFIER")) adaptateur.changerCouleur(couleur);
+                        else if (requete.equals("MODIFIER")) {
+                            String ancienNom = result.getData().getStringExtra("ancienNom");
+                            Log.i("--ListeCouleur", "nom : ");
+                            Log.i("--ListeCouleur", ancienNom);
+                            adaptateur.changerCouleur(couleur, ancienNom);
+                        }
                         else if (requete.equals("SUPPRIMER")) adaptateur.supprimerCouleur(couleur);
 
                     } else if( result.getResultCode() == RESULT_CANCELED) {
@@ -67,10 +67,7 @@ public class ListeCouleurs extends AppCompatActivity {
         setContentView( R.layout.activite_liste_couleurs );
 
         boolean dbUpToDate = checkDbState();
-        if(!dbUpToDate) {
-            //createAndPopulateDb();
-            writeDbState();
-        }
+        if(!dbUpToDate) writeDbState();
 
         getCouleursFromDB();
 
@@ -83,47 +80,9 @@ public class ListeCouleurs extends AppCompatActivity {
                 lanceurActiviteChoixCouleur.launch(intentionChoixCouleur);
             }
         });
-        //deleteInDb();
     }
 
     public void getLanceurActiviteChoixCouleur(Intent intent) { lanceurActiviteChoixCouleur.launch(intent); }
-
-    private void createAndPopulateDb() {
-        DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        db.beginTransaction();
-        for(int i =0;i<3;i++) {
-            String nom = String.format("couleur%d", i+1);
-            int a = (int) (Math.random()*255);
-            int r = (int) (Math.random()*255);
-            int g = (int) (Math.random()*255);
-            int b = (int) (Math.random()*255);
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("nom",nom);
-            contentValues.put("a",a);
-            contentValues.put("r",r);
-            contentValues.put("g",g);
-            contentValues.put("b",b);
-
-            db.insert("CouleurARGB", null, contentValues);
-        }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
-    }
-
-    private void deleteInDb() {
-        DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        db.beginTransaction();
-        db.execSQL("delete from CouleurARGB");
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
-    }
 
     @SuppressLint("Range")
     public void getCouleursFromDB() {
@@ -159,5 +118,43 @@ public class ListeCouleurs extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("dbUpToDate", true);
         editor.apply();
+    }
+
+    // Fonction pas utilisé, pour l'instant
+    private void createAndPopulateDb() {
+        DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+        for(int i =0;i<3;i++) {
+            String nom = String.format("couleur%d", i+1);
+            int a = (int) (Math.random()*255);
+            int r = (int) (Math.random()*255);
+            int g = (int) (Math.random()*255);
+            int b = (int) (Math.random()*255);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nom",nom);
+            contentValues.put("a",a);
+            contentValues.put("r",r);
+            contentValues.put("g",g);
+            contentValues.put("b",b);
+
+            db.insert("CouleurARGB", null, contentValues);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    private void deleteInDb() {
+        DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+        db.execSQL("delete from CouleurARGB");
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 }
