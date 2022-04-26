@@ -88,8 +88,6 @@ public class ListeCouleurs extends AppCompatActivity {
 
     public void getLanceurActiviteChoixCouleur(Intent intent) { lanceurActiviteChoixCouleur.launch(intent); }
 
-    private void setPositionEncours(int i) { adaptateur.setPositionEnCours(i); }
-
     private void createAndPopulateDb() {
         DbHelper dbHelper = new DbHelper(ListeCouleurs.this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -110,7 +108,6 @@ public class ListeCouleurs extends AppCompatActivity {
             contentValues.put("b",b);
 
             db.insert("CouleurARGB", null, contentValues);
-            this.setPositionEncours(i);
         }
         db.setTransactionSuccessful();
         db.endTransaction();

@@ -59,22 +59,15 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         etNomCouleur = findViewById( R.id.etNomCouleur );
 
         Intent intent = getIntent();
-        Log.i("--COULEUR", intent.getStringExtra("requete"));
         if(intent.getStringExtra("requete").equals("MODIFIER")) {
             actionToperform = "MODIFIER";
             Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
-            Log.i("--After Intent","couleur : " + couleur.toString());
-            if(couleur != null) {
-                putInitialValue(couleur);
-            }
+            if(couleur != null) putInitialValue(couleur);
         }
         else if (intent.getStringExtra("requete").equals("SUPPRIMER")) {
             actionToperform = "SUPPRIMER";
             Couleur couleur = (Couleur) intent.getParcelableExtra("couleur");
-            Log.i("--After Intent","couleur : " + couleur.toString());
-            if(couleur != null) {
-                putInitialValue(couleur);
-            }
+            if(couleur != null) putInitialValue(couleur);
             finish();
         }
 
@@ -113,7 +106,7 @@ public class ActiviteChoixCouleur extends AppCompatActivity implements SeekBar.O
         b = sbBleu.getProgress();
         String texteCouleur = "ARGB( " + a +" , " + r + " , " + v + " , " + b +" )";
         tvARGB.setText( texteCouleur);
-        tvCouleur.setBackgroundColor(Color.argb( a , r, v ,b ));
+        tvCouleur.setBackgroundColor(Color.argb(a, r, v, b));
     }
 
     @Override

@@ -29,12 +29,11 @@ import fr.supavenir.lsts.couleurs.db.DbHelper;
 public class AdaptateurCouleur extends BaseAdapter {
 
     private Context context;
-    private ModeleListeCouleurs modele = new ModeleListeCouleurs();
-    private int positionEnCours = 0;
+    private ArrayList<Couleur> couleurs;
 
     public AdaptateurCouleur(Context context , ArrayList<Couleur> couleurs) {
         this.context = context;
-        modele.setLesCouleurs(couleurs);
+        this.couleurs = couleurs;
     }
 
     public void ajouterCouleur(Couleur couleur) {
@@ -82,17 +81,17 @@ public class AdaptateurCouleur extends BaseAdapter {
     /** On adapte les methodes pour visualiser le modèle en mémoire. */
     @Override
     public int getCount() {
-        return modele.getLesCouleurs().size();
+        return couleurs.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return modele.getLesCouleurs().get(position);
+        return couleurs.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return -1;
     }
 
     @Override
@@ -107,13 +106,12 @@ public class AdaptateurCouleur extends BaseAdapter {
         Button btnSuppr = itemView.findViewById(R.id.btn_suppr);
         Button btnModif = itemView.findViewById(R.id.btn_modif);
 
-        int a = modele.getLesCouleurs().get(position).getA();
-        int r = modele.getLesCouleurs().get(position).getR();
-        int v = modele.getLesCouleurs().get(position).getV();
-        int b = modele.getLesCouleurs().get(position).getB();
-        String nom = modele.getLesCouleurs().get(position).getNom();
+        int a = couleurs.get(position).getA();
+        int r = couleurs.get(position).getR();
+        int v = couleurs.get(position).getV();
+        int b = couleurs.get(position).getB();
+        String nom = couleurs.get(position).getNom();
         Couleur couleur = new Couleur(a, r, v, b, nom);
-
 
         btnModif.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,11 +139,5 @@ public class AdaptateurCouleur extends BaseAdapter {
         tvNomCouleur.setText(((Couleur)getItem(position)).getNom());
         //itemView.setBackgroundColor(Color.argb(255, 200,200,200));
         return itemView;
-    }
-
-    public int getPositionEnCours() { return positionEnCours; }
-
-    public void setPositionEnCours(int positionEnCours) {
-        this.positionEnCours = positionEnCours;
     }
 }

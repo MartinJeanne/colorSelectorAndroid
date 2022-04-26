@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 
 
 public class DbHelper extends SQLiteOpenHelper {
-    final static String TAG="DbHelper";
     private final static int dbVersion = 2;
     private final static String dbName="mainDB";
 
@@ -17,13 +16,8 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, dbName, null, dbVersion);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /* Ci dessous, le code qui a été écrit pour la création de la base en version 1.
-        db.execSQL("CREATE TABLE DummyItems (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT);");
-        */
-
         // Le code ci-dessous correspond à la version 2 : la colonne description est ajoutée à la table
         db.execSQL("CREATE TABLE CouleurARGB (id INTEGER PRIMARY KEY AUTOINCREMENT" +
                 ", nom TEXT" +
@@ -33,8 +27,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 ", b INTEGER" +
                 ");"
         );
-
-        Log.d(TAG,"la méthode onCreate de DbHelper a été exécutée");
     }
 
     @Override
@@ -50,11 +42,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     // mise à jour future pour la version 3
                     break;
             }
-
         }
-        Log.d(TAG,"la méthode onUpgrade de DbHelper a été exécutée");
     }
-
 
     private void upgrapdeToVersion2(SQLiteDatabase db) {
         //db.execSQL("ALTER TABLE DummyItems  ADD COLUMN alpha INTEGER");
@@ -65,7 +54,5 @@ public class DbHelper extends SQLiteOpenHelper {
         String[] nomArray = {nom};
         db.execSQL("DELETE FROM CouleurARGB WHERE nom=?;",nomArray);
     }
-
-
 }
 
