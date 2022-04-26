@@ -47,8 +47,6 @@ public class ListeCouleurs extends AppCompatActivity {
                         if(requete.equals("AJOUTER")) adaptateur.ajouterCouleur(couleur);
                         else if (requete.equals("MODIFIER")) {
                             String ancienNom = result.getData().getStringExtra("ancienNom");
-                            Log.i("--ListeCouleur", "nom : ");
-                            Log.i("--ListeCouleur", ancienNom);
                             adaptateur.changerCouleur(couleur, ancienNom);
                         }
                         else if (requete.equals("SUPPRIMER")) adaptateur.supprimerCouleur(couleur);
