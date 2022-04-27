@@ -4,29 +4,29 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:padding="5dp">
+    android:padding="5dp" >
 
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        >
+        android:layout_marginBottom="5dp" >
 
         <Button
+            android:id="@+id/btnAjouterCouleur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#1be39d"
             android:text="Ajouter une couleur"
-            android:id="@+id/btnAjouterCouleur"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lvCouleurs"
-        />
+        android:id="@+id/lvCouleurs" />
 
 </LinearLayout>
